@@ -1,0 +1,139 @@
+#!/usr/bin/env node
+
+/**
+ * Module dependencies.
+ */
+
+var app = require('../app');
+var debug = require('debug')('myproject:server');
+var http = require('http');
+
+/**
+ * Get port from environment and store in Express.
+ */
+
+var port = normalizePort(process.env.PORT || '3000');
+app.set('port', port);
+
+/**
+ * Create HTTP server.
+ */
+
+var server = http.createServer(app);
+
+/**
+ * Listen on provided port, on all network interfaces.
+ */
+
+server.listen(port);
+server.on('error', onError);
+server.on('listening', onListening);
+
+// chat feature ===============================================================
+const io = require('socket.io')(server);
+var arrUser = [];
+var arrayClass = [];
+io.on('connection', (socket) => {
+    console.log(socket.id + 'da ket noi');
+    // console.log(socket.adapter.rooms);
+    io.sockets.emit('SERVER_SEND_ARRAY_CLASS', arrayClass);
+    socket.on('CLIENT_SEND_ACCOUNT', (account) => {
+        if (arrUser.indexOf(account) >= 0) {
+            socket.emit('SERVER_SEND_FAIL');
+        } else {
+            arrUser.push(account);
+            socket.username = account;
+            socket.emit('SERVER_SEND_SUCCESS');
+            io.sockets.emit('SERVER_SEND_ARRAY_USER', arrUser);
+            io.sockets.emit('SERVER_SEND_ARRAY_CLASS', arrayClass);
+        }
+    });
+
+    socket.on('LOGOUT', () => {
+        arrUser.splice(
+            arrUser.indexOf(socket.username, 1)
+        );
+        socket.broadcast.emit('SERVER_SEND_ARRAY_USER', arrUser);
+    });
+
+    socket.on('disconnect', () => {
+        arrUser.splice(
+            arrUser.indexOf(socket.username, 1)
+        );
+        socket.broadcast.emit('SERVER_SEND_ARRAY_USER', arrUser);
+    });
+
+    socket.on('CLIENT_SEND_MESSAGE', (txtMessage) => {
+        io.sockets.emit('SERVER_SEND_MESSAGE', { username: socket.username, message: txtMessage });
+    });
+
+
+    socket.on('CLIENT_CREATE_CLASS', (className) => {
+        socket.join(className);
+        socket.class = className;
+        arrayClass.push(className);
+        io.sockets.emit('SERVER_SEND_ARRAY_CLASS', arrayClass);
+        socket.emit('SERVER_SEND_ROOM_SOCKET', className);
+    });
+});
+// end chat feature ===============================================================
+
+/**
+ * Normalize a port into a number, string, or false.
+ */
+
+function normalizePort(val) {
+  var port = parseInt(val, 10);
+
+  if (isNaN(port)) {
+    // named pipe
+    return val;
+  }
+
+  if (port >= 0) {
+    // port number
+    return port;
+  }
+
+  return false;
+}
+
+/**
+ * Event listener for HTTP server "error" event.
+ */
+
+function onError(error) {
+  if (error.syscall !== 'listen') {
+    throw error;
+  }
+
+  var bind = typeof port === 'string'
+    ? 'Pipe ' + port
+    : 'Port ' + port;
+
+  // handle specific listen errors with friendly messages
+  switch (error.code) {
+    case 'EACCES':
+      console.error(bind + ' requires elevated privileges');
+      process.exit(1);
+      break;
+    case 'EADDRINUSE':
+      console.error(bind + ' is already in use');
+      process.exit(1);
+      break;
+    default:
+      throw error;
+  }
+}
+
+/**
+ * Event listener for HTTP server "listening" event.
+ */
+
+function onListening() {
+  var addr = server.address();
+  var bind = typeof addr === 'string'
+    ? 'pipe ' + addr
+    : 'port ' + addr.port;
+  debug('Listening on ' + bind);
+}

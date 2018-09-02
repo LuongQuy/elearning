@@ -1,0 +1,17 @@
+[
+    {
+        "id": 15,
+        "usr": "user1",
+        "pwd": "user1"
+    },
+    {
+        "id": 55,
+        "usr": "user2",
+        "pwd": "user2"
+    },
+    {
+        "id": 99,
+        "usr": "user3",
+        "pwd": "user3"
+    }
+]

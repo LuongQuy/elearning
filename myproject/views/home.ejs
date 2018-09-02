@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <% include layouts/content-header-tag %>
+</head>
+<body>
+    <div id="wrapper">
+        <!-- Navigation -->
+        <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
+            <% include layouts/navbar-header %>
+            <% include layouts/navbar-top-links %>
+            <% include layouts/right-sidebar %>
+        </nav>
+ 
+        <div id="page-wrapper">
+            <% include layouts/page-title %>
+            <% include pages/class-room-online/class-room-online %>
+        </div>
+        <!-- /#page-wrapper -->
+    </div>
+    <!-- /#wrapper -->
+    <% include layouts/scripts %>
+</body>
+</html>

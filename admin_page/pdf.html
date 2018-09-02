@@ -1,0 +1,19 @@
+<iframe id="iframe" src="./ctdaotao.pdf" width="760px" height="570px" frameborder="0" marginwidth="0"></iframe>
+<script src="./vendor/jquery/jquery.js"></script>
+<script>
+
+    function putScriptInIframes(script, scriptId) {
+
+        var $iframes = $('iframe');
+        $iframes.each(function () {
+                var thisDoc = this.contentWindow.document;
+                var scriptObj = thisDoc.createElement("script");
+                scriptObj.type = "text/javascript";
+                scriptObj.id = scriptId;
+                scriptObj.innerHTML = script;
+                thisDoc.body.appendChild(scriptObj);
+        });
+    }
+    var script = "alert('hello world');";
+    putScriptInIframes(script);
+</script>

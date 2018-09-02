@@ -1,0 +1,35 @@
+<div id="login">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4 col-md-offset-4">
+                <div class="login-panel panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Please Sign In</h3>
+                    </div>
+                    <div class="panel-body">
+                        <form role="form" action="/login" method="POST">
+                            <fieldset>
+                                <div class="form-group">
+                                    <!-- <input class="form-control" placeholder="E-mail" name="email" type="email" id="email" autofocus> -->
+                                    <input class="form-control" placeholder="Tên đăng nhập" name="username" type="text" id="txtUserName" autofocus autocomplete="off">
+                                </div>
+                                <div class="form-group">
+                                    <input class="form-control" placeholder="Mật khẩu" name="password" type="password" value="" autocomplete="off">
+                                </div>
+                                <div class="checkbox">
+                                    <label>
+                                        <input name="remember" type="checkbox" value="Remember Me">Remember Me
+                                    </label>
+                                </div>
+                                <!-- Change this to a button or input when using this as a form -->
+                                <a href="#" class="btn btn-lg btn-success btn-block" id="btnLogin">
+                                    Login
+                                </a>
+                            </fieldset>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
